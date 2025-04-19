@@ -1,3 +1,5 @@
+Em mongoDB as collections são como as tabelas nos bancos relacionais e documents são os dados. 
+
 Comandos mongoDB
 
 Mostrar todos os bancos de dados:
@@ -7,42 +9,93 @@ config       72.00 KiB
 local        80.00 KiB
 servidor_A  616.00 KiB
 
-
+***************************************************************
 
 Criar um banco de dados(o banco só é criado de fato quando os dados são inseridos):
 test> use primeirobanco
 switched to db primeirobanco
 primeirobanco>
 
+***************************************************************
 
-
-Criando uma collection e inserindo o primeiro dado:
+Criando uma collection e inserindo o primeiro dado(documents):
 primeirobanco> db.primeiracollection.insertOne({nome: "Luis Carlos", idade: 33, hobbies: ["ler", "jogar", "correr", "programar"]})
 {
   acknowledged: true,
   insertedId: ObjectId('67b067d07e40a55de1cb0ce2')
 }
 
+***************************************************************
 
+Inserir múltiplos documents(dados) de uma vez:
+a)primeirobanco> db.quartacollection.insertMany([{nome: "Luis Cesar", salario: 2500}, {nome: "Paula Donattis", salario: 3000}, 
+{nome: "Renata Soarez", salario: 1800}, {nome: "Ricardo Alvez", salario: 3600}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('67b19e617e40a55de1cb0ce9'),
+    '1': ObjectId('67b19e617e40a55de1cb0cea'),
+    '2': ObjectId('67b19e617e40a55de1cb0ceb'),
+    '3': ObjectId('67b19e617e40a55de1cb0cec')
+  }
+}
+
+b)test> use mercado
+switched to db mercado
+mercado> db.produtos.insertMany([{nome: "Spaghetti Adria nº 8 (500g)", preço: 3.99, disponibilidade: "disponível"}, {nome: 
+"Achocolatado Nescau (500g)", preço: 7.85, disponibilidade: "indisponível"}, {nome: "Coca Cola (2L)", preço: 9.00, disponibilidade: 
+"disponível"}, {nome: "Filé de frango(kg)", preço: 17.50, disponibilidade: "diponível"}, {nome: "Pão francês(50g)", preço: 0.85, 
+disponibilidade: "indisponível"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6803696dc71879fd75cb0ce2'),
+    '1': ObjectId('6803696dc71879fd75cb0ce3'),
+    '2': ObjectId('6803696dc71879fd75cb0ce4'),
+    '3': ObjectId('6803696dc71879fd75cb0ce5'),
+    '4': ObjectId('6803696dc71879fd75cb0ce6')
+  }
+}
+
+c)mercado> use concessionaria
+switched to db concessionaria
+concessionaria> db.carros.insertMany([{id: 4879, marca: "Volkswagen", modelo: "Gol GTi", "ano de fabricação": 1989, 
+Kilometragem_rodada: "30 mil km"}, {id: 8978, marca: "Honda", modelo: "Civic", "ano de fabricação": 2012, Kilometragem_rodada: "60 
+mil km"}, {id: 7546, marca: "Toyota", modelo: "Corolla Sedan", "ano de fabricação": 2010, Kilometragem_rodada: "72 mil km"}, {id: 
+2389, marca: "Chevrolet", modelo: "Onix Plus", "ano de fabricação": 2023 , Kilometragem_rodada: "45 mil km"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('68036a47c71879fd75cb0ce7'),
+    '1': ObjectId('68036a47c71879fd75cb0ce8'),
+    '2': ObjectId('68036a47c71879fd75cb0ce9'),
+    '3': ObjectId('68036a47c71879fd75cb0cea')
+  }
+}
+
+***************************************************************
 
 Criando uma collection chamada provas:
-Criando 2 dados com os nomes dos alunos e um array chamado notas, com as notas das provas de cada aluno:
-escola> use aluno
-switched to db aluno
-aluno> db.provas.insertOne({nome: "Luis Carlos", notas: [ 8.5 , 7, 8 ]})
+Criando 2 dados(documents) com os nomes dos alunos e um array chamado notas, com as notas das provas de cada aluno:
+concessionaria> use alunos
+switched to db alunos
+alunos> db.provas.insertOne({nome: "Luis Carlos", notas: [ 8.5 , 7, 8 ]})
 {
   acknowledged: true,
-  insertedId: ObjectId('67ca8d568a13d0d43ecb0ce2')
+  insertedId: ObjectId('6803e0e1c71879fd75cb0ceb')
 }
-aluno> db.provas.insertOne({nome: "João Paulo", notas: [ 9 , 8.5, 10 ]})
+alunos> db.provas.insertOne({nome: "João Paulo", notas: [ 9 , 8.5, 10 ]})
 {
   acknowledged: true,
-  insertedId: ObjectId('67ca8fb28a13d0d43ecb0ce3')
+  insertedId: ObjectId('6803e0f4c71879fd75cb0cec')
 }
 
+Inserindo múltiplos alunos:
+alunos> db.provas.insertOne([{nome: "Luis Carlos", notas: [ 8.5 , 7, 8 ]}, {}, {}, {}])
 
+***************************************************************
 
-Encontrar um dado no banco:
+Encontrar um dado(documents) no banco:
 a)primeirobanco> db.primeiracollection.findOne({_id: ObjectId('67ad7ccb3caf60af36cb0ce2')})
 {
   _id: ObjectId('67ad7ccb3caf60af36cb0ce2'),
@@ -83,9 +136,10 @@ advantage of MongoDB and get up and running quickly.`,
   categories: [ 'Next Generation Databases' ]
 }
 
+***************************************************************
 
-Encontrar mais de um dado no banco:
-a)primeirobanco> db.primeiracollection.find({})
+Encontrar mais de um dado(documents) no banco:
+a)primeirobanco> db.primeiracollection.find()
 [
   {
     _id: ObjectId('67ad7ccb3caf60af36cb0ce2'),
@@ -120,31 +174,31 @@ c)mercado> db.produtos.find()
     _id: ObjectId('67ccc20d57f69e9598cb0ce2'),
     nome: 'Spaghetti Adria nº 8 (500g)',
     'preço': 3.99,
-    diponibilidade: 'disponível'
+    disponibilidade: 'disponível'
   },
   {
     _id: ObjectId('67ccc20d57f69e9598cb0ce3'),
     nome: 'Achocolatado Nescau (500g)',
     'preço': 7.85,
-    diponibilidade: 'indisponível'
+    disponibilidade: 'indisponível'
   },
   {
     _id: ObjectId('67ccc20d57f69e9598cb0ce4'),
     nome: 'Coca Cola (2L)',
     'preço': 9,
-    diponibilidade: 'disponível'
+    disponibilidade: 'disponível'
   },
   {
     _id: ObjectId('67ccc20d57f69e9598cb0ce5'),
     nome: 'Filé de frango(kg)',
     'preço': 17.5,
-    diponibilidade: 'diponível'
+    disponibilidade: 'diponível'
   },
   {
     _id: ObjectId('67ccc20d57f69e9598cb0ce6'),
     nome: 'Pão francês(50g)',
     'preço': 0.85,
-    diponibilidade: 'indisponível'
+    disponibilidade: 'indisponível'
   }
 ]
 
@@ -184,7 +238,7 @@ d)dadosDeCarros> db.carros.find().pretty()
   }
 ]
 
-
+***************************************************************
 
 Encontrar todos os dados que tenha os mesmos valores:
 a)primeirobanco> db.primeiracollection.find({"idade": 42})
@@ -222,23 +276,22 @@ development with PowerDynamo  Advanced component design ",
   }
 ]
 
-
-
+***************************************************************
 
 O comando use serve para criar e trocar de banco de dados:
 primeirobanco> use servidor_A
 switched to db servidor_A
 servidor_A>
 
-
+***************************************************************
 
 O comando db serve para mostrar o banco atual:
 servidor_A> db
 servidor_A
 
+***************************************************************
 
-
-A função pretty() trás um retorno de dados melhor formatado:
+A função pretty() apresenta os dados com uma formatação melhor:
 primeirobanco> db.primeiracollection.find().pretty()
 [
   {
@@ -260,69 +313,71 @@ primeirobanco> db.primeiracollection.find().pretty()
   }
 ]
 
-
+***************************************************************
 
 Criação de collections de forma implicita:
 Quando eu insiro limitações eu tenho que colocar o atributo capped. 
 primeirobanco> db.createCollection("segundacollection", { capped: true, size: 1000, max: 3 })
 { ok: 1 }
 
-
+***************************************************************
 
 Exibir todas as collections:
 primeirobanco> show collections
 primeiracollection
 segundacollection
 
+***************************************************************
 
+Atualizar banco de dados
 
-Inserir múltiplos documentos de uma vez:
-a)primeirobanco> db.quartacollection.insertMany([{nome: "Luis Cesar", salario: 2500}, {nome: "Paula Donattis", salario: 3000}, 
-{nome: "Renata Soarez", salario: 1800}, {nome: "Ricardo Alvez", salario: 3600}])
+Atualizar uma linha:
+a)mercado> db.produtos.updateOne({ nome: "Spaghetti Adria nº 8 (500g)" }, { $set: { disponibilidade: 98 } });
 {
   acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('67b19e617e40a55de1cb0ce9'),
-    '1': ObjectId('67b19e617e40a55de1cb0cea'),
-    '2': ObjectId('67b19e617e40a55de1cb0ceb'),
-    '3': ObjectId('67b19e617e40a55de1cb0cec')
-  }
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
 }
 
-b)test> use mercado
-switched to db mercado
-mercado> db.produtos.insertMany([{nome: "Spaghetti Adria nº 8 (500g)", preço: 3.99, diponibilidade: "disponível"}, {nome: 
-"Achocolatado Nescau (500g)", preço: 7.85, diponibilidade: "indisponível"}, {nome: "Coca Cola (2L)", preço: 9.00, diponibilidade: 
-"disponível"}, {nome: "Filé de frango(kg)", preço: 17.50, diponibilidade: "diponível"}, {nome: "Pão francês(50g)", preço: 0.85, 
-diponibilidade: "indisponível"}])
+b)mercado> db.produtos.updateOne({ nome: "Achocolatado Nescau (500g)" }, { $set: { disponibilidade: 57, preço: 7.35 } });
 {
   acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('67ccc20d57f69e9598cb0ce2'),
-    '1': ObjectId('67ccc20d57f69e9598cb0ce3'),
-    '2': ObjectId('67ccc20d57f69e9598cb0ce4'),
-    '3': ObjectId('67ccc20d57f69e9598cb0ce5'),
-    '4': ObjectId('67ccc20d57f69e9598cb0ce6')
-  }
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
 }
 
-c)mercado> use dadosDeCarros
-switched to db dadosDeCarros
-dadosDeCarros> db.carros.insertMany([{id: 4879, marca: "Volkswagen", modelo: "Gol GTi", "ano de fabricação": 1989, 
-Kilometragem_rodada: "30 mil km"}, {id: 8978, marca: "Honda", modelo: "Civic", "ano de fabricação": 2012, Kilometragem_rodada: "60 
-mil km"}, {id: 7546, marca: "Toyota", modelo: "Corolla Sedan", "ano de fabricação": 2010, Kilometragem_rodada: "72 mil km"}, {id: 
-2389, marca: "Chevrolet", modelo: "Onix Plus", "ano de fabricação": 2023 , Kilometragem_rodada: "45 mil km"}])
+c)mercado> db.produtos.updateOne({ nome: "Coca Cola (2L)" }, { $set: { disponibilidade: 120, preço: 7.35 } });
 {
   acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('67cce27357f69e9598cb0ceb'),
-    '1': ObjectId('67cce27357f69e9598cb0cec'),
-    '2': ObjectId('67cce27357f69e9598cb0ced'),
-    '3': ObjectId('67cce27357f69e9598cb0cee')
-  }
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
 }
 
+d)mercado> db.produtos.updateOne({ nome: "Filé de frango(kg)" }, { $set: {preço: 16.00 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
 
+e)mercado> db.produtos.updateOne({ nome: "Pão francês(50g)" }, { $set: { preço: 0.80 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+***************************************************************
 
 Podemos remover collections quando elas não forem mais necessárias ou se errarmos o nome, por exemplo;
 test> show dbs
@@ -341,7 +396,7 @@ terceiracollection
 primeirobanco> db.segundacollection.drop()
 true
 
-
+***************************************************************
 
 Removendo banco de dados:
 Todos os dados e collections serão excluídos.
@@ -356,7 +411,7 @@ switched to db primeirobanco
 test> db.dropDatabase()
 {"dropped" : "primeirobanco" , "ok" : 1}
 
-
+***************************************************************
 
 Importar banco de dados em JSON:
 PS C:\users\cesar\onedrive\documentos\documentos b\mongodb\curso_mongodb-main\2_gerenciamento_de_dbs> mongoimport books.json -d 
@@ -371,14 +426,18 @@ local           80.00 KiB
 primeirobanco  160.00 KiB
 servidor_A     616.00 KiB
 
-
+***************************************************************
 
 Exportar banco de dados em JSON:
 PS C:\Users\cesar\onedrive\documentos\documentos b\mongodb> mongoexport -c livros -d booksData -o booksData.json
 2025-02-19T10:51:11.873-0300    connected to: mongodb://localhost/
 2025-02-19T10:51:11.980-0300    exported 431 records
 
+-d: database
+-c: collection
+-o: output
 
+***************************************************************
 
 Importar dados do mongodump (muitas collections):
 Para importar os arquivos gerados do mongodump, utilizamos o mongorestore;
@@ -402,13 +461,13 @@ primeirobanco\primeirobanco\terceiracollection.metadata.json
 2025-02-19T22:35:23.451-0300    no indexes to restore for collection primeirobanco.terceiracollection
 2025-02-19T22:35:23.451-0300    8 document(s) restored successfully. 0 document(s) failed to restore.
 
-
+***************************************************************
 
 Exportar muitas collections:
 Quando o banco possui mais de uma collection a melhor opção de exportação é o mongodump;
-Utilizamos assim: mongodump -d <nome-banco> -o <nome-do-diretorio>
-Onde o -o(output) criará uma pasta com o nome do diretóio informado, no local que você escolheu para salvar, com os arquivos de cada 
-collection;
+Utilizamos assim: mongodump -d nome-banco-que-será-exportado -o nome-da-database-que-será-salva
+Onde o -o(output) criará uma pasta com o nome do diretóio informado no local que você escolheu para salvar e com os arquivos de 
+cada collection;
 PS C:\Users\cesar\onedrive\documentos\documentos b\mongodb> mongodump -d primeirobanco -o primeirobanco
 2025-02-19T22:09:50.626-0300    writing primeirobanco.quartacollection to primeirobanco\primeirobanco\quartacollection.bson
 2025-02-19T22:09:50.659-0300    writing primeirobanco.primeiracollection to primeirobanco\primeirobanco\primeiracollection.bson
@@ -417,7 +476,7 @@ PS C:\Users\cesar\onedrive\documentos\documentos b\mongodb> mongodump -d primeir
 2025-02-19T22:09:50.671-0300    done dumping primeirobanco.primeiracollection (3 documents)
 2025-02-19T22:09:50.675-0300    done dumping primeirobanco.terceiracollection (1 document)
 
-
+***************************************************************
 
 Podemos checar algumas informações como, quantidade de consultas rodando, consumo de rede e outros dados;
 Teremos uma aba do terminal ocupada, atualizando a todo segundo e trazendo informações em tempo real;
@@ -434,10 +493,10 @@ insert query update delete getmore command dirty used flushes vsize   res qrw ar
     *0    *0     *0     *0       0     1|0  0.0% 0.0%       0 4.65G 35.0M 0|0 0|0   112b   84.0k    3 Feb 20 17:07:34.410
     *0    *0     *0     *0       0     2|0  0.0% 0.0%       0 4.65G 35.0M 0|0 0|0   321b   84.4k    3 Feb 20 17:07:35.410
 
-
+***************************************************************
 
 Forma simples de remover vários bancos (Criar um snippet)
-No VS Code abra a pasta em que está o banco de dados, acesse o mongoshell(com o comando mongosh)  e cole seguinte script no terminal:
+No VS Code abra a pasta em que está o banco de dados, acesse o mongoshell(com o comando mongosh) e cole seguinte script no terminal:
 test> Mongo().getDBNames().forEach(function(db){
 ...     if(['admin', 'config', 'local'].indexOf(db) < 0){
 ...         Mongo().getDB(db).dropDatabase();
@@ -446,14 +505,14 @@ test> Mongo().getDBNames().forEach(function(db){
 
 Observação: O mongoDB precisa ter sido iniciado no PC.
 
-
+***************************************************************
 
 A principal diferença entre implementar um CRUD com MySQL ou MongoDB está no modelo de dados e na forma como as consultas são 
-estruturadas. Aqui está um comparativo:
+estruturadas:
 
 1. Modelo de Dados
 
-MySQL (Relacional):
+MySQL (Banco Relacional):
 -Usa tabelas com colunas e linhas.
 -Dados estruturados com chaves primárias e estrangeiras.
 -Relacionamentos entre entidades são feitos com JOINs.
@@ -467,8 +526,8 @@ CREATE TABLE users (
   age INT
 );
 
-MongoDB (NoSQL, Orientado a Documentos):
--Usa coleções que armazenam documentos JSON (objetos).
+MongoDB (NoSQL, Banco Não Relacional e Orientado a Documentos):
+-Usa coleções que armazenam documents(dados) no formato JSON (objetos).
 -Dados sem estrutura fixa (schema flexível).
 -Relacionamentos são feitos embutindo documentos ou com referências.
 
