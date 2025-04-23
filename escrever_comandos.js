@@ -1,0 +1,6 @@
+db.carros.insertMany([
+    {},
+    {},
+    {},
+    {}
+])
