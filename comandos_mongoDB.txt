@@ -12,6 +12,7 @@ servidor_A  616.00 KiB
 ***************************************************************
 
 Criar um banco de dados(o banco só é criado de fato quando os dados são inseridos):
+
 test> use primeirobanco
 switched to db primeirobanco
 primeirobanco>
@@ -19,6 +20,7 @@ primeirobanco>
 ***************************************************************
 
 Criando uma collection e inserindo o primeiro dado(documents):
+
 primeirobanco> db.primeiracollection.insertOne({nome: "Luis Carlos", idade: 33, hobbies: ["ler", "jogar", "correr", "programar"]})
 {
   acknowledged: true,
@@ -27,7 +29,31 @@ primeirobanco> db.primeiracollection.insertOne({nome: "Luis Carlos", idade: 33, 
 
 ***************************************************************
 
+Personalizando o id:
+
+test> show dbs
+admin           40.00 KiB
+alunos          40.00 KiB
+concessionaria  40.00 KiB
+config          72.00 KiB
+local           72.00 KiB
+mercado         56.00 KiB
+test> use mercado
+switched to db mercado
+mercado> db.produtos.insertOne({_id: "4587", nome: "Achocolatado Toddy (500g)", preço: 8.99, disponibilidade: "55"})
+{ acknowledged: true, insertedId: '4587' }
+mercado> db.produtos.findOne({_id: '4587'})
+{
+  _id: '4587',
+  nome: 'Achocolatado Toddy (500g)',
+  'preço': 8.99,
+  disponibilidade: '55'
+}
+
+***************************************************************
+
 Inserir múltiplos documents(dados) de uma vez:
+
 a)primeirobanco> db.quartacollection.insertMany([{nome: "Luis Cesar", salario: 2500}, {nome: "Paula Donattis", salario: 3000}, 
 {nome: "Renata Soarez", salario: 1800}, {nome: "Ricardo Alvez", salario: 3600}])
 {
@@ -59,24 +85,20 @@ disponibilidade: "indisponível"}])
 
 c)mercado> use concessionaria
 switched to db concessionaria
-concessionaria> db.carros.insertMany([{id: 4879, marca: "Volkswagen", modelo: "Gol GTi", "ano de fabricação": 1989, 
-Kilometragem_rodada: "30 mil km"}, {id: 8978, marca: "Honda", modelo: "Civic", "ano de fabricação": 2012, Kilometragem_rodada: "60 
-mil km"}, {id: 7546, marca: "Toyota", modelo: "Corolla Sedan", "ano de fabricação": 2010, Kilometragem_rodada: "72 mil km"}, {id: 
-2389, marca: "Chevrolet", modelo: "Onix Plus", "ano de fabricação": 2023 , Kilometragem_rodada: "45 mil km"}])
+concessionaria> db.carros.insertMany([{_id: 4879, marca: "Volkswagen", modelo: "Gol GTi", ano_fabricacao: 1989, Kilometragem: "30 
+mil km"}, {_id: 8978, marca: "Honda", modelo: "Civic", ano_fabricacao: 2012, Kilometragem: "60 mil km"}, {_id: 7546, marca: 
+"Toyota", modelo: "Corolla Sedan", ano_fabricacao: 2010, Kilometragem: "72 mil km"}, {_id: 2389, marca: "Chevrolet", modelo: "Onix 
+Plus", ano_fabricacao: 2023 , Kilometragem: "45 mil km"}])
 {
   acknowledged: true,
-  insertedIds: {
-    '0': ObjectId('68036a47c71879fd75cb0ce7'),
-    '1': ObjectId('68036a47c71879fd75cb0ce8'),
-    '2': ObjectId('68036a47c71879fd75cb0ce9'),
-    '3': ObjectId('68036a47c71879fd75cb0cea')
-  }
+  insertedIds: { '0': 4879, '1': 8978, '2': 7546, '3': 2389 }
 }
 
 ***************************************************************
 
 Criando uma collection chamada provas:
 Criando 2 dados(documents) com os nomes dos alunos e um array chamado notas, com as notas das provas de cada aluno:
+
 concessionaria> use alunos
 switched to db alunos
 alunos> db.provas.insertOne({nome: "Luis Carlos", notas: [ 8.5 , 7, 8 ]})
@@ -96,6 +118,7 @@ alunos> db.provas.insertOne([{nome: "Luis Carlos", notas: [ 8.5 , 7, 8 ]}, {}, {
 ***************************************************************
 
 Encontrar um dado(documents) no banco:
+
 a)primeirobanco> db.primeiracollection.findOne({_id: ObjectId('67ad7ccb3caf60af36cb0ce2')})
 {
   _id: ObjectId('67ad7ccb3caf60af36cb0ce2'),
@@ -103,7 +126,15 @@ a)primeirobanco> db.primeiracollection.findOne({_id: ObjectId('67ad7ccb3caf60af3
   idade: 42
 }
 
-b)booksData> db.livros.findOne({title: "MongoDB in Action"})
+b)mercado> db.produtos.findOne({_id: '4587'})
+{
+  _id: '4587',
+  nome: 'Achocolatado Toddy (500g)',
+  'preço': 8.99,
+  disponibilidade: '55'
+}
+
+c)booksData> db.livros.findOne({title: "MongoDB in Action"})
 {
   _id: 17,
   title: 'MongoDB in Action',
@@ -139,6 +170,7 @@ advantage of MongoDB and get up and running quickly.`,
 ***************************************************************
 
 Encontrar mais de um dado(documents) no banco:
+
 a)primeirobanco> db.primeiracollection.find()
 [
   {
@@ -241,6 +273,7 @@ d)dadosDeCarros> db.carros.find().pretty()
 ***************************************************************
 
 Encontrar todos os dados que tenha os mesmos valores:
+
 a)primeirobanco> db.primeiracollection.find({"idade": 42})
 [
   {
@@ -279,6 +312,7 @@ development with PowerDynamo  Advanced component design ",
 ***************************************************************
 
 O comando use serve para criar e trocar de banco de dados:
+
 primeirobanco> use servidor_A
 switched to db servidor_A
 servidor_A>
@@ -286,12 +320,14 @@ servidor_A>
 ***************************************************************
 
 O comando db serve para mostrar o banco atual:
+
 servidor_A> db
 servidor_A
 
 ***************************************************************
 
 A função pretty() apresenta os dados com uma formatação melhor:
+
 primeirobanco> db.primeiracollection.find().pretty()
 [
   {
@@ -317,12 +353,14 @@ primeirobanco> db.primeiracollection.find().pretty()
 
 Criação de collections de forma implicita:
 Quando eu insiro limitações eu tenho que colocar o atributo capped. 
+
 primeirobanco> db.createCollection("segundacollection", { capped: true, size: 1000, max: 3 })
 { ok: 1 }
 
 ***************************************************************
 
 Exibir todas as collections:
+
 primeirobanco> show collections
 primeiracollection
 segundacollection
@@ -492,6 +530,27 @@ insert query update delete getmore command dirty used flushes vsize   res qrw ar
     *0    *0     *0     *0       0     0|0  0.0% 0.0%       0 4.65G 35.0M 0|0 0|0   111b   83.6k    3 Feb 20 17:07:33.412
     *0    *0     *0     *0       0     1|0  0.0% 0.0%       0 4.65G 35.0M 0|0 0|0   112b   84.0k    3 Feb 20 17:07:34.410
     *0    *0     *0     *0       0     2|0  0.0% 0.0%       0 4.65G 35.0M 0|0 0|0   321b   84.4k    3 Feb 20 17:07:35.410
+
+***************************************************************
+
+O Write Concern é uma configuração que pode ser inserida no
+insertMany;
+a. Podemos limitar o tempo de execução da inserção;
+b. Retornando um erro de time out caso exceda o mesmo;
+c. Exemplo: {w: “majority”, wtimeout: 100}
+d. A inserção tem 100ms para ser executada;
+e. Só é possível testar com muitos dados.
+
+mercado> db.produtos.insertMany([{_id: "4433", nome: "Farinha de Trigo Dona Benta (500g)", preço: 4.99, disponibilidade: "30"}, 
+{_id: "4422", nome: "Fanta Uva (2L)", preço: 7.99, disponibilidade: "70"}], {w: 'majority', wtimeout: 100})
+{ acknowledged: true, insertedIds: { '0': '4433', '1': '4422' } }
+mercado> db.produtos.findOne({_id: '4422'})
+{
+  _id: '4422',
+  nome: 'Fanta Uva (2L)',
+  'preço': 7.99,
+  disponibilidade: '70'
+}
 
 ***************************************************************
 
